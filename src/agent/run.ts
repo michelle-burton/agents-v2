@@ -1,7 +1,9 @@
+import 'dotenv/config';
+
 import { generateText, type ModelMessage } from 'ai'
 import { openai } from '@ai-sdk/openai'
 import { SYSTEM_PROMPT } from './system/prompt'
-import { AgentCallbacks } from '../types';
+import type { AgentCallbacks } from '../types';
 const MODEL_NAME = "gpt-5-mini";
 
 
