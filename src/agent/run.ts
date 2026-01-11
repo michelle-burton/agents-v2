@@ -1,23 +1,27 @@
 import 'dotenv/config';
 
-import { generateText, type ModelMessage } from 'ai'
+import { generateText, stepCountIs, type ModelMessage } from 'ai'
 import { openai } from '@ai-sdk/openai'
-import { SYSTEM_PROMPT } from './system/prompt'
-import type { AgentCallbacks } from '../types';
+import { SYSTEM_PROMPT } from './system/prompt.ts'
+import type { AgentCallbacks } from '../types.ts';
+import {tools} from "./tools/index.ts"
 const MODEL_NAME = "gpt-5-mini";
 
 
-export const run = async (
+export const runAgent = async (
     userMessage: string,
     conversationHistory: ModelMessage[],
     callbacks: AgentCallbacks,
 ) => {
-    const { text } = await generateText({
+    const { text, toolCalls } = await generateText({
         model: openai(MODEL_NAME),
         prompt: userMessage,
         system: SYSTEM_PROMPT,
+        tools,
+        stopWhen: stepCountIs(1),
     });
-    console.log(text)
+    console.log(text, toolCalls)
 };
 
-run("hi my name is Michelle")
+// run in terminal: npx tsx src/agent/run.ts
+runAgent("What is the current time?")
